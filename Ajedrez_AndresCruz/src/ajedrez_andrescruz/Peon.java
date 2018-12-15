@@ -66,42 +66,7 @@ public class Peon extends Pieza{
     @Override
     public ArrayList<Posicion> posiblesMovimientos(Pieza[][] Matriz) {
         ArrayList<Posicion> posiciones = new ArrayList();
-        try{            
-            if(this.getPosInicial().getX() == 6){               
-                for(int i=super.getPosY()-1; i<= super.getPosY()+1; i++){                    
-                    if(i>= 0 && i<8){                        
-                        if(Matriz[super.getPosX()-1][i] == null){
-                            if(super.getPosY() == i){
-                                posiciones.add(new Posicion(super.getPosX()-1,i));
-                            }
-                        }else if(i != super.getPosY() && !(Matriz[super.getPosY()-1][i].getColor().equals(super.getColor()))){
-                            posiciones.add(new Posicion(super.getPosX()-1,i));
-                        }
-                    }
-                }               
-                if(this.isPrimermovimiento() == true && Matriz[super.getPosY()][super.getPosX()-2]==null){
-                    posiciones.add(new Posicion(super.getPosY(), super.getPosX()-2));
-                }
-            }else{                
-                for(int i=super.getPosY()-1; i<= super.getPosY()+1; i++){
-                    if(i>= 0 && i<8){
-                        if(Matriz[super.getPosX()+1][i] == null){
-                            if(super.getPosY() == i){
-                                posiciones.add(new Posicion(super.getPosX()+1,i));
-                            }
-                        }else if(i != super.getPosY() && !(Matriz[super.getPosY()+1][i].getColor().equals(super.getColor()))){
-                            posiciones.add(new Posicion(super.getPosX()+1,i));
-                        }
-                    }
-                }
-                if(this.isPrimermovimiento() == true && Matriz[super.getPosY()+2][super.getPosX()] == null){
-                    posiciones.add(new Posicion(super.getPosY(), super.getPosX()+2));
-                }
-            }
-        }catch(Exception e){
-            System.err.println("error en peon");
-            e.printStackTrace();
-        }
+        
         return posiciones;
     }
     

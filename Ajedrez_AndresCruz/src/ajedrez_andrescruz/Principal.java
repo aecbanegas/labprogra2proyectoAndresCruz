@@ -279,41 +279,41 @@ public class Principal extends javax.swing.JFrame {
         for (int i = 0; i < MatrizBotones.length; i++) {
             for (int j = 0; j < MatrizBotones[i].length; j++) {
                 if (i == 6) {
-                    piezas[i][j] = new Peon("Blanco",i,j);
+                    piezas[i][j] = new Peon("Blanco", i, j);
                 }
-//                if (i == 1) {
-//                    piezas[i][j] = new Peon("Negro",i,j);
-//                }
+                if (i == 1) {
+                    piezas[i][j] = new Peon("Negro", i, j);
+                }
                 if ((i == 0 && j == 0) || (i == 0 && j == 7)) {
-                    piezas[i][j] = new Torre("Negro",i,j);
+                    piezas[i][j] = new Torre("Negro", i, j);
                 }
                 if ((i == 7 && j == 0) || (i == 7 && j == 7)) {
-                    piezas[i][j] = new Torre("Blanco",i,j);
+                    piezas[i][j] = new Torre("Blanco", i, j);
                 }
                 if ((i == 7 && j == 1) || (i == 7 && j == 6)) {
-                    piezas[i][j] = new Caballo("Blanco",i,j);
+                    piezas[i][j] = new Caballo("Blanco", i, j);
                 }
                 if ((i == 0 && j == 1) || (i == 0 && j == 6)) {
-                    piezas[i][j] = new Caballo("Negro",i,j);
+                    piezas[i][j] = new Caballo("Negro", i, j);
                 }
                 if ((i == 0 && j == 2) || (i == 0 && j == 5)) {
-                    piezas[i][j] = new Alfil("Negro",i,j);
+                    piezas[i][j] = new Alfil("Negro", i, j);
                 }
                 if ((i == 7 && j == 2) || (i == 7 && j == 5)) {
-                    piezas[i][j] = new Alfil("Blanco",i,j);
+                    piezas[i][j] = new Alfil("Blanco", i, j);
                 }
                 if (j == 3) {
                     if (i == 0) {
-                        piezas[i][j] = new Reina("Negro",i,j);
+                        piezas[i][j] = new Reina("Negro", i, j);
                     } else if (i == 7) {
-                        piezas[i][j] = new Reina("Blanco",i,j);
+                        piezas[i][j] = new Reina("Blanco", i, j);
                     }
                 }
                 if (j == 4) {
                     if (i == 0) {
-                        piezas[i][j] = new Rey("Negro",i,j);
+                        piezas[i][j] = new Rey("Negro", i, j);
                     } else if (i == 7) {
-                        piezas[i][j] = new Rey("Blanco",i,j);
+                        piezas[i][j] = new Rey("Blanco", i, j);
                     }
                 }
             }
@@ -342,15 +342,86 @@ public class Principal extends javax.swing.JFrame {
     private void jb_moverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_moverMouseClicked
         // TODO add your handling code here:
         try {
-            int xi=(Integer)jsxinicio.getValue();
-            int yi=(Integer)jsyinicio.getValue();
-            Pieza h=piezas[xi][yi];
-            System.out.println(h.getNombre());
-            System.out.println(h.posiblesMovimientos(piezas));
+            int xi = (Integer) jsxinicio.getValue();
+            int yi = (Integer) jsyinicio.getValue();
+            Pieza h = piezas[xi][yi];
+            if (h instanceof Caballo) {
+
+            } else if (h instanceof Peon) {
+
+            } else {
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jb_moverMouseClicked
+
+    public boolean legalMoveCaballo(int startRow, int startColumn, int desRow, int desColumn) {
+
+        if (desRow == (startRow - 2) && desColumn == (startColumn - 1)) //2N, 1E
+        {
+            return true;
+        } else if (desRow == (startRow - 2) && desColumn == (startColumn + 1)) //2N, 1W
+        {
+            return true;
+        } else if (desRow == (startRow + 2) && desColumn == (startColumn - 1)) //2S, 1E
+        {
+            return true;
+        } else if (desRow == (startRow + 2) && desColumn == (startColumn + 1)) //2S, 1W
+        {
+            return true;
+        } else if (desRow == (startRow - 1) && desColumn == (startColumn - 2)) //1N, 2E
+        {
+            return true;
+        } else if (desRow == (startRow - 1) && desColumn == (startColumn + 2)) //1N, 2W
+        {
+            return true;
+        } else if (desRow == (startRow + 1) && desColumn == (startColumn - 2)) //1S, 2E
+        {
+            return true;
+        } else if (desRow == (startRow + 1) && desColumn == (startColumn + 2)) //1S, 2W
+        {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public boolean legalMovePeon(int startRow, int startColumn, int desRow, int desColumn, Pieza[][] playerMatrix, int currentPlayer) {
+
+        boolean legalMove = true;
+        int[] playerPawnStart = {6, 1};
+        if ((currentPlayer == 1 && desRow >= startRow) || (currentPlayer == 2 && desRow <= startRow)) //Si se mueven en direccion incorrcta
+        {            
+            legalMove = false;
+        } else if (desColumn != startColumn) {
+            if ((desColumn > startColumn && desColumn == (startColumn + 1)) || (desColumn < startColumn && desColumn == (startColumn - 1))) {
+                if ((desRow == (startRow + 1) && currentPlayer == 2) || (desRow == (startRow - 1) && currentPlayer == 1)) {
+                    if (playerMatrix[desRow][desColumn] == null) {                        
+                        legalMove = false;
+                    }
+                } else {                    
+                    legalMove = false;
+                }
+            } else {                
+                legalMove = false;
+            }
+        } else if ((currentPlayer == 1 && desRow < (startRow - 1)) || (currentPlayer == 2 && desRow > (startRow + 1))) //If moved two or more places
+        {
+            if ((currentPlayer == 1 && desRow == (startRow - 2)) || (currentPlayer == 2 && desRow == (startRow + 2))) //If moved two places
+            {
+                if (playerPawnStart[currentPlayer - 1] != startRow) {                    
+                    legalMove = false;
+                }
+            } else {
+                legalMove = false;
+            }
+        }
+        return legalMove;
+
+    }
 
     private void EliminarRecursiva(JButton matriz[][], int filas, int cols) {
         if (filas == matriz.length - 1 && cols == matriz[0].length - 1) {
