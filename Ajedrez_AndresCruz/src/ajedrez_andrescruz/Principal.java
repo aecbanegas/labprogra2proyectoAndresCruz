@@ -95,6 +95,11 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jb_mover.setText("Completar Accion");
+        jb_mover.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_moverMouseClicked(evt);
+            }
+        });
 
         jsyfin.setModel(new javax.swing.SpinnerNumberModel(0, 0, 7, 1));
 
@@ -274,41 +279,41 @@ public class Principal extends javax.swing.JFrame {
         for (int i = 0; i < MatrizBotones.length; i++) {
             for (int j = 0; j < MatrizBotones[i].length; j++) {
                 if (i == 6) {
-                    piezas[i][j] = new Peon("Blanco");
+                    piezas[i][j] = new Peon("Blanco",i,j);
                 }
-                if (i == 1) {
-                    piezas[i][j] = new Peon("Negro");
-                }
+//                if (i == 1) {
+//                    piezas[i][j] = new Peon("Negro",i,j);
+//                }
                 if ((i == 0 && j == 0) || (i == 0 && j == 7)) {
-                    piezas[i][j] = new Torre("Negro");
+                    piezas[i][j] = new Torre("Negro",i,j);
                 }
                 if ((i == 7 && j == 0) || (i == 7 && j == 7)) {
-                    piezas[i][j] = new Torre("Blanco");
+                    piezas[i][j] = new Torre("Blanco",i,j);
                 }
                 if ((i == 7 && j == 1) || (i == 7 && j == 6)) {
-                    piezas[i][j] = new Caballo("Blanco");
+                    piezas[i][j] = new Caballo("Blanco",i,j);
                 }
                 if ((i == 0 && j == 1) || (i == 0 && j == 6)) {
-                    piezas[i][j] = new Caballo("Negro");
+                    piezas[i][j] = new Caballo("Negro",i,j);
                 }
                 if ((i == 0 && j == 2) || (i == 0 && j == 5)) {
-                    piezas[i][j] = new Alfil("Negro");
+                    piezas[i][j] = new Alfil("Negro",i,j);
                 }
                 if ((i == 7 && j == 2) || (i == 7 && j == 5)) {
-                    piezas[i][j] = new Alfil("Blanco");
+                    piezas[i][j] = new Alfil("Blanco",i,j);
                 }
                 if (j == 3) {
                     if (i == 0) {
-                        piezas[i][j] = new Reina("Negro");
+                        piezas[i][j] = new Reina("Negro",i,j);
                     } else if (i == 7) {
-                        piezas[i][j] = new Reina("Blanco");
+                        piezas[i][j] = new Reina("Blanco",i,j);
                     }
                 }
                 if (j == 4) {
                     if (i == 0) {
-                        piezas[i][j] = new Rey("Negro");
+                        piezas[i][j] = new Rey("Negro",i,j);
                     } else if (i == 7) {
-                        piezas[i][j] = new Rey("Blanco");
+                        piezas[i][j] = new Rey("Blanco",i,j);
                     }
                 }
             }
@@ -333,6 +338,19 @@ public class Principal extends javax.swing.JFrame {
     private void jb_iniciojuegoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jb_iniciojuegoKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jb_iniciojuegoKeyPressed
+
+    private void jb_moverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_moverMouseClicked
+        // TODO add your handling code here:
+        try {
+            int xi=(Integer)jsxinicio.getValue();
+            int yi=(Integer)jsyinicio.getValue();
+            Pieza h=piezas[xi][yi];
+            System.out.println(h.getNombre());
+            System.out.println(h.posiblesMovimientos(piezas));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jb_moverMouseClicked
 
     private void EliminarRecursiva(JButton matriz[][], int filas, int cols) {
         if (filas == matriz.length - 1 && cols == matriz[0].length - 1) {

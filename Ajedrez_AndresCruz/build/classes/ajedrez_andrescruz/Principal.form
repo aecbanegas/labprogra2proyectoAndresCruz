@@ -166,6 +166,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Completar Accion"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jb_moverMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSpinner" name="jsyfin">
           <Properties>

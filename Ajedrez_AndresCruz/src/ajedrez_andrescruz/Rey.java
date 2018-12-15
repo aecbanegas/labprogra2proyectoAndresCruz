@@ -14,13 +14,28 @@ import javax.swing.JButton;
  */
 public class Rey extends Pieza{
 
-    public Rey(String color) {
-        super("Rey", color);
+    public Rey(String color,int X,int Y) {
+        super("Rey", color,X,Y);
     }
 
     @Override
-    public ArrayList posiblesMovimientos(JButton[][] Matriz) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<Posicion> posiblesMovimientos(Pieza[][] Matriz) {
+        ArrayList<Posicion> posiciones = new ArrayList();
+        for(int i=super.getPosX()-1; i<=super.getPosX()+1; i++){ // Filas
+            for(int j=super.getPosY()-1; j<=super.getPosY()+1; j++){ // Columnas
+                // Si la posicion no esta vacia
+                if(i != super.getPosX() || j != super.getPosY()){
+                    try{                        
+                        if(!Matriz[i][j].getColor().equals(super.getColor())){
+                            posiciones.add(new Posicion(i, j)); 
+                        }
+                    }catch(Exception e){
+                        posiciones.add(new Posicion(i, j));
+                    }
+                }
+            }
+        }
+        return posiciones;
     }
     
 }
