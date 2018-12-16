@@ -409,7 +409,7 @@ public class Principal extends javax.swing.JFrame {
             int yi = (Integer) jsyinicio.getValue();
             int xf = (Integer) jsxfin.getValue();
             int yf = (Integer) jsyfin.getValue();
-            Pieza h = piezas[xi][yi];            
+            Pieza h = piezas[xi][yi];
             if (turno == true && h.getColor().equals("Blanco")) {
                 comb = true;
             } else if (turno == false && h.getColor().equals("Negro")) {
@@ -429,7 +429,9 @@ public class Principal extends javax.swing.JFrame {
                             move = legalMoveCaballo(xi, yi, xf, yf);
                             if (move) {
                                 piezas[xf][yf] = null;
-                                piezas[xf][yf] = new Caballo(col, xf, yf);
+                                piezas[xi][yi].setPosX(xf);
+                                piezas[xi][yi].setPosY(yf);
+                                piezas[xf][yf] = piezas[xi][yi];
                                 piezas[xi][yi] = null;
                                 actualizar();
                                 gana();
@@ -441,7 +443,9 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         move = legalMoveCaballo(xi, yi, xf, yf);
                         if (move) {
-                            piezas[xf][yf] = new Caballo(col, xf, yf);
+                            piezas[xi][yi].setPosX(xf);
+                            piezas[xi][yi].setPosY(yf);
+                            piezas[xf][yf] = piezas[xi][yi];
                             piezas[xi][yi] = null;
                             actualizar();
                             gana();
@@ -465,7 +469,9 @@ public class Principal extends javax.swing.JFrame {
                             move = legalMovePeon(xi, yi, xf, yf, piezas, current);
                             if (move) {
                                 piezas[xf][yf] = null;
-                                piezas[xf][yf] = new Peon(col, xf, yf);
+                                piezas[xi][yi].setPosX(xf);
+                                piezas[xi][yi].setPosY(yf);
+                                piezas[xf][yf] = piezas[xi][yi];
                                 piezas[xi][yi] = null;
                                 actualizar();
                                 gana();
@@ -477,7 +483,10 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         move = legalMovePeon(xi, yi, xf, yf, piezas, current);
                         if (move) {
-                            piezas[xf][yf] = new Peon(col, xf, yf);
+                            piezas[xf][yf] = null;
+                            piezas[xi][yi].setPosX(xf);
+                            piezas[xi][yi].setPosY(yf);
+                            piezas[xf][yf] = piezas[xi][yi];
                             piezas[xi][yi] = null;
                             actualizar();
                             gana();
@@ -502,7 +511,7 @@ public class Principal extends javax.swing.JFrame {
                         piezas[xf][yf] = piezas[xi][yi];
                         piezas[xi][yi] = null;
                         actualizar();
-                        gana();                        
+                        gana();
                         turno = !turno;
                     } else {
                         JOptionPane.showMessageDialog(jd_juego, "Movimiento no valido!");
