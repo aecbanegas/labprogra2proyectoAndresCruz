@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -220,6 +221,11 @@ public class Principal extends javax.swing.JFrame {
                 jb_iniciojuegoMouseClicked(evt);
             }
         });
+        jb_iniciojuego.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_iniciojuegoActionPerformed(evt);
+            }
+        });
         jb_iniciojuego.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jb_iniciojuegoKeyPressed(evt);
@@ -251,6 +257,8 @@ public class Principal extends javax.swing.JFrame {
         } else {
             jug2 = tf_jugador2.getText();
         }
+        tf_jugador1.setText("");
+        tf_jugador2.setText("");
         if (ValidarDimensiones()) {
             MatrizBotones = new JButton[DimensionX][DimensionY];
             jp_botones.setLayout(new GridLayout(DimensionX, DimensionY));
@@ -328,12 +336,60 @@ public class Principal extends javax.swing.JFrame {
         }
         if (turno) {
             jug_turno.setText(jug1);
+        } else {
+            jug_turno.setText(jug2);
         }
         jd_juego.setModal(true);
         jd_juego.setLocationRelativeTo(this);
         jd_juego.pack();
         jd_juego.setVisible(true);
     }//GEN-LAST:event_jb_iniciojuegoMouseClicked
+
+    public void actualizar() {
+        if (HayElementos()) {
+            EliminarRecursiva(MatrizBotones, 7, 7);
+            jp_botones.removeAll();
+            RedibujarTablero();
+        }
+        if (ValidarDimensiones()) {
+            MatrizBotones = new JButton[DimensionX][DimensionY];
+            jp_botones.setLayout(new GridLayout(DimensionX, DimensionY));
+            ObtenerTamanioObjetos(DimensionX, DimensionY);
+            for (int contadorX = 0; contadorX < DimensionX; contadorX++) {
+                for (int contadorY = 0; contadorY < DimensionY; contadorY++) {
+                    JButton btnNuevo = new JButton();
+                    if ((contadorX + contadorY) % 2 == 0) {
+                        btnNuevo.setBackground(java.awt.Color.YELLOW);
+                    } else {
+                        btnNuevo.setBackground(java.awt.Color.BLUE);
+                    }
+                    btnNuevo.setSize(TamX, TamY);
+                    btnNuevo.setToolTipText(Integer.toString(contadorX) + "," + Integer.toString(contadorY));
+                    MatrizBotones[contadorX][contadorY] = btnNuevo;
+                    MatrizBotones[contadorX][contadorY].addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            Click(btnNuevo);
+                        }
+                    });
+                    jp_botones.add(MatrizBotones[contadorX][contadorY]);
+                    RedibujarTablero();
+                }
+            }
+        }
+        for (int i = 0; i < MatrizBotones.length; i++) {
+            for (int j = 0; j < MatrizBotones.length; j++) {
+                if (piezas[i][j] == null) {
+                } else {
+                    MatrizBotones[i][j].setIcon(piezas[i][j].getIcon());
+                }
+            }
+        }
+        if (turno) {
+            jug_turno.setText(jug1);
+        } else {
+            jug_turno.setText(jug2);
+        }
+    }
 
     private void jb_iniciojuegoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jb_iniciojuegoKeyPressed
         // TODO add your handling code here:
@@ -342,20 +398,130 @@ public class Principal extends javax.swing.JFrame {
     private void jb_moverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_moverMouseClicked
         // TODO add your handling code here:
         try {
+            boolean comb = false;
+            String col;
+            if (turno) {
+                col = "blanco";
+            } else {
+                col = "negro";
+            }
             int xi = (Integer) jsxinicio.getValue();
             int yi = (Integer) jsyinicio.getValue();
-            Pieza h = piezas[xi][yi];
-            if (h instanceof Caballo) {
-
-            } else if (h instanceof Peon) {
-
+            int xf = (Integer) jsxfin.getValue();
+            int yf = (Integer) jsyfin.getValue();
+            Pieza h = piezas[xi][yi];            
+            if (turno == true && h.getColor().equals("Blanco")) {
+                comb = true;
+            } else if (turno == false && h.getColor().equals("Negro")) {
+                comb = true;
             } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una pieza que pertenezca a su color.");
+            }
+            if (comb) {
 
+                ArrayList<Posicion> comp = new ArrayList();
+                if (h instanceof Caballo) {
+                    boolean move = false;
+                    if (piezas[xf][yf] != null) {
+                        if (piezas[xf][yf].getColor().equalsIgnoreCase(col)) {
+                            JOptionPane.showMessageDialog(jd_juego, "No se pueden comer piezas del mismo color.");
+                        } else {
+                            move = legalMoveCaballo(xi, yi, xf, yf);
+                            if (move) {
+                                piezas[xf][yf] = null;
+                                piezas[xf][yf] = new Caballo(col, xf, yf);
+                                piezas[xi][yi] = null;
+                                actualizar();
+                                gana();
+                                turno = !turno;
+                            } else {
+                                JOptionPane.showMessageDialog(jd_juego, "Movimiento no valido!");
+                            }
+                        }
+                    } else {
+                        move = legalMoveCaballo(xi, yi, xf, yf);
+                        if (move) {
+                            piezas[xf][yf] = new Caballo(col, xf, yf);
+                            piezas[xi][yi] = null;
+                            actualizar();
+                            gana();
+                            turno = !turno;
+                        } else {
+                            JOptionPane.showMessageDialog(jd_juego, "Movimiento no valido!");
+                        }
+                    }
+                } else if (h instanceof Peon) {
+                    boolean move = false;
+                    int current;
+                    if (turno) {
+                        current = 1;
+                    } else {
+                        current = 2;
+                    }
+                    if (piezas[xf][yf] != null) {
+                        if (piezas[xf][yf].getColor().equalsIgnoreCase(col)) {
+                            JOptionPane.showMessageDialog(jd_juego, "No se pueden comer piezas del mismo color.");
+                        } else {
+                            move = legalMovePeon(xi, yi, xf, yf, piezas, current);
+                            if (move) {
+                                piezas[xf][yf] = null;
+                                piezas[xf][yf] = new Peon(col, xf, yf);
+                                piezas[xi][yi] = null;
+                                actualizar();
+                                gana();
+                                turno = !turno;
+                            } else {
+                                JOptionPane.showMessageDialog(jd_juego, "Movimiento no valido!");
+                            }
+                        }
+                    } else {
+                        move = legalMovePeon(xi, yi, xf, yf, piezas, current);
+                        if (move) {
+                            piezas[xf][yf] = new Peon(col, xf, yf);
+                            piezas[xi][yi] = null;
+                            actualizar();
+                            gana();
+                            turno = !turno;
+                        } else {
+                            JOptionPane.showMessageDialog(jd_juego, "Movimiento no valido!");
+                        }
+                    }
+                } else {
+                    boolean mover = false;
+                    comp = h.posiblesMovimientos(piezas);
+                    for (int i = 0; i < comp.size(); i++) {
+                        if ((comp.get(i).getX() == xf) && (comp.get(i).getY() == yf)) {
+                            mover = true;
+                            break;
+                        }
+                    }
+                    if (mover) {
+                        piezas[xf][yf] = null;
+                        piezas[xi][yi].setPosX(xf);
+                        piezas[xi][yi].setPosY(yf);
+                        piezas[xf][yf] = piezas[xi][yi];
+                        piezas[xi][yi] = null;
+                        actualizar();
+                        gana();                        
+                        turno = !turno;
+                    } else {
+                        JOptionPane.showMessageDialog(jd_juego, "Movimiento no valido!");
+                    }
+                }
+                actualizar();
+                jsxfin.setValue(0);
+                jsxinicio.setValue(0);
+                jsyfin.setValue(0);
+                jsyinicio.setValue(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jb_moverMouseClicked
+
+    private void jb_iniciojuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_iniciojuegoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jb_iniciojuegoActionPerformed
 
     public boolean legalMoveCaballo(int startRow, int startColumn, int desRow, int desColumn) {
 
@@ -389,30 +555,53 @@ public class Principal extends javax.swing.JFrame {
 
     }
 
+    public void gana() {
+        int cont = 0;
+        for (int i = 0; i < piezas.length; i++) {
+            for (int j = 0; j < piezas.length; j++) {
+                if (piezas[i][j] instanceof Rey) {
+                    cont++;
+                }
+            }
+        }
+        String gana;
+        if (turno) {
+            gana = jug1;
+        } else {
+            gana = jug2;
+        }
+        if (cont == 2) {
+
+        } else {
+            JOptionPane.showMessageDialog(jd_juego, "Felicidades ha ganado " + gana);
+            jd_juego.dispose();
+        }
+    }
+
     public boolean legalMovePeon(int startRow, int startColumn, int desRow, int desColumn, Pieza[][] playerMatrix, int currentPlayer) {
 
         boolean legalMove = true;
         int[] playerPawnStart = {6, 1};
         if ((currentPlayer == 1 && desRow >= startRow) || (currentPlayer == 2 && desRow <= startRow)) //Si se mueven en direccion incorrcta
-        {            
+        {
             legalMove = false;
         } else if (desColumn != startColumn) {
             if ((desColumn > startColumn && desColumn == (startColumn + 1)) || (desColumn < startColumn && desColumn == (startColumn - 1))) {
                 if ((desRow == (startRow + 1) && currentPlayer == 2) || (desRow == (startRow - 1) && currentPlayer == 1)) {
-                    if (playerMatrix[desRow][desColumn] == null) {                        
+                    if (playerMatrix[desRow][desColumn] == null) {
                         legalMove = false;
                     }
-                } else {                    
+                } else {
                     legalMove = false;
                 }
-            } else {                
+            } else {
                 legalMove = false;
             }
         } else if ((currentPlayer == 1 && desRow < (startRow - 1)) || (currentPlayer == 2 && desRow > (startRow + 1))) //If moved two or more places
         {
             if ((currentPlayer == 1 && desRow == (startRow - 2)) || (currentPlayer == 2 && desRow == (startRow + 2))) //If moved two places
             {
-                if (playerPawnStart[currentPlayer - 1] != startRow) {                    
+                if (playerPawnStart[currentPlayer - 1] != startRow) {
                     legalMove = false;
                 }
             } else {
@@ -548,5 +737,5 @@ public class Principal extends javax.swing.JFrame {
     JButton[][] MatrizBotones;
     Pieza[][] piezas = new Pieza[8][8];
     boolean turno = true;
-
+    boolean ganar = false;
 }
