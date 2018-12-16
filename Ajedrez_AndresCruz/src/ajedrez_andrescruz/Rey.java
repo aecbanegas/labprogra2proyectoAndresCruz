@@ -21,9 +21,8 @@ public class Rey extends Pieza{
     @Override
     public ArrayList<Posicion> posiblesMovimientos(Pieza[][] Matriz) {
         ArrayList<Posicion> posiciones = new ArrayList();
-        for(int i=super.getPosX()-1; i<=super.getPosX()+1; i++){ // Filas
-            for(int j=super.getPosY()-1; j<=super.getPosY()+1; j++){ // Columnas
-                // Si la posicion no esta vacia
+        for(int i=super.getPosX()-1; i<=super.getPosX()+1; i++){
+            for(int j=super.getPosY()-1; j<=super.getPosY()+1; j++){                 
                 if(i != super.getPosX() || j != super.getPosY()){
                     try{                        
                         if(!Matriz[i][j].getColor().equals(super.getColor())){

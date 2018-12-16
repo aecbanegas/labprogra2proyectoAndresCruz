@@ -534,28 +534,28 @@ public class Principal extends javax.swing.JFrame {
 
     public boolean legalMoveCaballo(int startRow, int startColumn, int desRow, int desColumn) {
 
-        if (desRow == (startRow - 2) && desColumn == (startColumn - 1)) //2N, 1E
+        if (desRow == (startRow - 2) && desColumn == (startColumn - 1))
         {
             return true;
-        } else if (desRow == (startRow - 2) && desColumn == (startColumn + 1)) //2N, 1W
+        } else if (desRow == (startRow - 2) && desColumn == (startColumn + 1))
         {
             return true;
-        } else if (desRow == (startRow + 2) && desColumn == (startColumn - 1)) //2S, 1E
+        } else if (desRow == (startRow + 2) && desColumn == (startColumn - 1))
         {
             return true;
-        } else if (desRow == (startRow + 2) && desColumn == (startColumn + 1)) //2S, 1W
+        } else if (desRow == (startRow + 2) && desColumn == (startColumn + 1))
         {
             return true;
-        } else if (desRow == (startRow - 1) && desColumn == (startColumn - 2)) //1N, 2E
+        } else if (desRow == (startRow - 1) && desColumn == (startColumn - 2))
         {
             return true;
-        } else if (desRow == (startRow - 1) && desColumn == (startColumn + 2)) //1N, 2W
+        } else if (desRow == (startRow - 1) && desColumn == (startColumn + 2)) 
         {
             return true;
-        } else if (desRow == (startRow + 1) && desColumn == (startColumn - 2)) //1S, 2E
+        } else if (desRow == (startRow + 1) && desColumn == (startColumn - 2))
         {
             return true;
-        } else if (desRow == (startRow + 1) && desColumn == (startColumn + 2)) //1S, 2W
+        } else if (desRow == (startRow + 1) && desColumn == (startColumn + 2)) 
         {
             return true;
         }
@@ -591,7 +591,7 @@ public class Principal extends javax.swing.JFrame {
 
         boolean legalMove = true;
         int[] playerPawnStart = {6, 1};
-        if ((currentPlayer == 1 && desRow >= startRow) || (currentPlayer == 2 && desRow <= startRow)) //Si se mueven en direccion incorrcta
+        if ((currentPlayer == 1 && desRow >= startRow) || (currentPlayer == 2 && desRow <= startRow))
         {
             legalMove = false;
         } else if (desColumn != startColumn) {
@@ -606,9 +606,9 @@ public class Principal extends javax.swing.JFrame {
             } else {
                 legalMove = false;
             }
-        } else if ((currentPlayer == 1 && desRow < (startRow - 1)) || (currentPlayer == 2 && desRow > (startRow + 1))) //If moved two or more places
+        } else if ((currentPlayer == 1 && desRow < (startRow - 1)) || (currentPlayer == 2 && desRow > (startRow + 1)))
         {
-            if ((currentPlayer == 1 && desRow == (startRow - 2)) || (currentPlayer == 2 && desRow == (startRow + 2))) //If moved two places
+            if ((currentPlayer == 1 && desRow == (startRow - 2)) || (currentPlayer == 2 && desRow == (startRow + 2)))
             {
                 if (playerPawnStart[currentPlayer - 1] != startRow) {
                     legalMove = false;
